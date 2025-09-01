@@ -60,4 +60,4 @@ fileByIO.close
 ```
 
 ### Example 
-[ตัวอย่าง Ruby](io.ruby)
+[ตัวอย่าง Ruby](rw.ruby)
