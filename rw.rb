@@ -1,5 +1,9 @@
+=begin
+https://www.geeksforgeeks.org/ruby/file-handling-in-ruby/ 
+https://www.techotopia.com/index.php/Working_with_Files_in_Ruby
+=end
 
-def rwCheck
+def rwCheck()
   puts File.file?("io.txt")
   puts File.readable?("io.txt")
   puts File.writable?("io.txt")  
