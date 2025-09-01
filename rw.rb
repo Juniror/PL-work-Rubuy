@@ -11,10 +11,7 @@ def rwFile
     puts 'What your Command
 1.read
 2.write
-3.append
-4.delete
-5.change name
-6.exit'
+3.exit'
     print "Type number or keyword : "
     command = gets.chomp 
     case command
@@ -41,37 +38,7 @@ def rwFile
         rescue => e
           puts "Error: #{e.message}"
         end
-
-      when "append", "3"
-        begin
-          fileobject = File.new(name, "a")
-          puts "What text do u want to add"
-          added = gets.chomp
-          fileobject.syswrite(added)
-          fileobject.close
-        rescue => e
-          puts "Error: #{e.message}"
-        end
-
-      when "delete", "4"
-        begin
-          puts File.delete(name)
-        rescue => e
-          puts "Error: #{e.message}"
-        end
-      
-      when "change name", "5"
-        begin
-          puts "Name want to be change"
-          newName = gets.chomp
-          File.rename(name,newName)
-          name = newName
-          puts "Success rename"
-        rescue => e
-          puts "Error: #{e.message}"
-        end
-
-      when "exit", "6"
+      when "exit", "3"
         break
       else
         puts "Unknown command!"
