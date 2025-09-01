@@ -41,4 +41,4 @@ File จะคืนค่าเป็น object ส่วน IO จะคืน
   fileobject.close
 ```
 ### Example
-[ไปที่โค้ดตัวเต็ม](code/rw.ruby)
+[ไปที่โค้ดตัวเต็ม](io.ruby)
