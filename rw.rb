@@ -1,8 +1,3 @@
-=begin
-https://www.geeksforgeeks.org/ruby/file-handling-in-ruby/ 
-https://www.techotopia.com/index.php/Working_with_Files_in_Ruby
-=end
-
 def rwCheck()
   puts File.file?("example.txt")
   puts File.readable?("example.txt")

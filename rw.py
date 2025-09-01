@@ -1,5 +1,3 @@
-# https://www.geeksforgeeks.org/python/how-to-read-from-a-file-in-python/
-# https://www.geeksforgeeks.org/python/read-a-file-line-by-line-in-python/
 filename = input("Enter the file name to work with (.txt): ")
 
 while True:

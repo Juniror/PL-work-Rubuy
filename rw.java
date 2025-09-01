@@ -1,7 +1,3 @@
-
-// https://www.geeksforgeeks.org/java/file-handling-java-using-filewriter-filereader/
-// https://docs.oracle.com/javase/tutorial/essential/io/file.html
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
