@@ -192,6 +192,7 @@ except FileNotFoundError:
     print("Error: File was not found!")
 
    ```
+python เป็นภาษาที่ออกกแบบมาให้ดูง่าย เมื่อใช้ with ทำให้ file close อัตโนมัต ทำให้โค้ดดูสะอาดและเขียนง่าย
   </details>
   
 ### Example 
