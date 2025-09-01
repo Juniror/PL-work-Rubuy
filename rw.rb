@@ -4,9 +4,9 @@ https://www.techotopia.com/index.php/Working_with_Files_in_Ruby
 =end
 
 def rwCheck()
-  puts File.file?("io.txt")
-  puts File.readable?("io.txt")
-  puts File.writable?("io.txt")  
+  puts File.file?("example.txt")
+  puts File.readable?("example.txt")
+  puts File.writable?("example.txt")  
 end 
 
 def rwFile
@@ -23,39 +23,58 @@ def rwFile
     print "Type number or keyword : "
     command = gets.chomp 
     case command
-      # read
       when "read" , "1"
-        if !File.file?(name) 
-          puts "Create the file first"
+        begin
+          if !File.file?(name) 
+            puts "Create the file first"
+          else
+            fileobject = File.new(name, "r")
+            puts fileobject.read
+            fileobject.close
+          end
+        rescue => e
+          puts "Error: #{e.message}"
         end
-        fileobject = File.new(name, "r")
-        puts fileobject.read
-        fileobject.close
 
-      # write start
       when "write", "2"
-        fileobject = File.new(name, "w")
-        puts "What text do u want to replace"
-        newText = gets.chomp
-        fileobject.syswrite(newText)
-        fileobject.close
+        begin
+          fileobject = File.new(name, "w")
+          puts "What text do u want to replace"
+          newText = gets.chomp
+          fileobject.syswrite(newText)
+          fileobject.close
+        rescue => e
+          puts "Error: #{e.message}"
+        end
 
-      # write end
       when "append", "3"
-        fileobject = File.new(name, "a")
-        puts "What text do u want to add"
-        added = gets.chomp
-        fileobject.syswrite(added)
-        fileobject.close
-      
+        begin
+          fileobject = File.new(name, "a")
+          puts "What text do u want to add"
+          added = gets.chomp
+          fileobject.syswrite(added)
+          fileobject.close
+        rescue => e
+          puts "Error: #{e.message}"
+        end
+
       when "delete", "4"
-        puts File.delete(name)
+        begin
+          puts File.delete(name)
+        rescue => e
+          puts "Error: #{e.message}"
+        end
       
       when "change name", "5"
-        puts "Name want to be change"
-        newName = gets.chomp
-        File.rename(name,newName)
-        puts "Success rename"
+        begin
+          puts "Name want to be change"
+          newName = gets.chomp
+          File.rename(name,newName)
+          name = newName
+          puts "Success rename"
+        rescue => e
+          puts "Error: #{e.message}"
+        end
 
       when "exit", "6"
         break
