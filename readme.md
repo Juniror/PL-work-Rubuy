@@ -61,7 +61,26 @@ fileByIO.readlines.each { |line| puts line }
 
 fileByIO.close
 ```
+### Write
+ในการเขียน Ruby จะทำผ่าน File โดยจะต้องสร้างไฟล์ก่อน ถ้าไม่มีจะสร้างให้อัตโนมัตตาม permission ที่ตั้งให้ เช่น
 
+w+ เขียนทับไฟล์เดิมเลย
+
+a+ เขียนลงท้ายไฟล์
+
+```ruby
+fileobject = File.new("example.txt", "a+")
+
+# เขียนโดยผ่าน System โดยตรง ไม่เพิ่มบรรทัดใหม่ 
+fileobject.syswrite("direct write")
+
+# เขียนโดยผ่าน buffer ของ ruby ไม่เพิ่มบรรทัดใหม่
+fileobject.write("Write by buffer")
+
+# เขียนปกติ โดยเพิ่มบรรทัดใหม่ 
+fileobject.puts "normal writing"
+fileobject.close      
+```
 
 ### Compare to other language
   <details>
