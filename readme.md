@@ -168,7 +168,7 @@ BufferReader -> อ่านทีละบรรทัด
       return 0;
   }
    ```
-เนื่องจาก C เป็น low language มันจะค่อนข้างอ่านยาก เนื่องจากเป็นการอ่านไฟล์โดยใช้ pointer ชี้และอ่านค่าจาก pointer แปลงเป็น char และเมื่อใช้เสร็จจำเป็นต้อง rewind pointer กลับเข้าจุดตั้งเดิม จะเห็นได้เลยว่า Ruby นั้นง่ายกว่า
+เนื่องจาก C เป็น low language มันจะค่อนข้างอ่านยาก เนื่องจากเป็นการอ่านไฟล์โดยใช้ pointer ชี้และอ่านค่าจาก pointer แปลงเป็น char และเมื่อใช้เสร็จจำเป็นต้อง rewind pointer กลับเข้าจุดตั้งเดิม เนื่องด้วยไม่มี Class ช่วยเลย  จะเห็นได้เลยว่า Ruby นั้นง่ายกว่า เพราะมี Class File รองรับ
   </details>
 
   </details> 
@@ -191,16 +191,331 @@ except FileNotFoundError:
     print("Error: File was not found!")
 
    ```
-python เป็นภาษาที่ออกกแบบมาให้ดูง่าย เมื่อใช้ with ทำให้ file close อัตโนมัต ทำให้โค้ดดูสะอาดและเขียนง่าย
+python เป็นภาษาที่ออกกแบบมาให้ดูง่าย เมื่อใช้ with ทำให้ file close อัตโนมัต ทำให้โค้ดดูสะอาดและเขียนง่าย ต่างจาก Ruby ที่อาจจะดูยากหน่อย แต่โดยรวมค่อนข้างคล้ายกัน
   </details>
   
-### Example 
+### Example
 
-[ตัวอย่าง Ruby](rw.rb)
+<details>
+  <summary>Ruby</summary>
+  
+  ```ruby
+   def rwCheck()
+    puts File.file?("example.txt")
+    puts File.readable?("example.txt")
+    puts File.writable?("example.txt")  
+end 
 
-[ตัวอย่าง Java](rw.java)
+def rwFile
+    print "What name of file to work with (.txt) : "
+    name = gets.chomp
+    while true 
+      puts 'What your Command
+  1.read
+  2.write
+  3.exit'
+      print "Type number or keyword : "
+      command = gets.chomp 
+      case command
+        when "read" , "1"
+          begin
+            if !File.file?(name) 
+              puts "Create the file first"
+            else
+              fileobject = File.new(name, "r")
+              puts fileobject.read
+              fileobject.close
+            end
+          rescue => e
+            puts "Error: #{e.message}"
+          end
+  
+        when "write", "2"
+          begin
+            fileobject = File.new(name, "w")
+            puts "What text do u want to replace"
+            newText = gets.chomp
+            fileobject.syswrite(newText)
+            fileobject.close
+          rescue => e
+            puts "Error: #{e.message}"
+          end
+        when "exit", "3"
+          break
+        else
+          puts "Unknown command!"
+        end
+        puts ""
+      end
+end
 
-[ตัวอย่าง C](rw.c)
+rwFile
+  ```
 
-[ตัวอย่าง Python](rw.py)
+</details>
+<details>
+  <summary>Java</summary>
+  
+  ```java
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Scanner;
 
+public class rw {
+    static Scanner sc = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        System.out.print("Enter the file name to work with (.txt): ");
+        String filename = sc.nextLine();
+        while (true) {
+            System.out.println("""
+                    1.Check
+                    2.FileReader and FileWriter
+                    3.Byte
+                    4.BufferReader and BufferWriter
+                    5.Exit""");
+            System.out.print("type number for command : ");
+            String command = sc.nextLine();
+            switch (command) {
+                case "check", "1":
+                    checkRW(filename);
+                    break;
+                case "2":
+                    byFileReaderandFileWriter(filename);
+                    break;
+                case "3":
+                    readByBtye(filename);
+                    break;
+                case "4":
+                    readByBufferReaderandBufferWriter(filename);
+                    break;
+                case "exit", "5":
+                    sc.close();
+                    return;
+                default:
+                    System.out.println("Wrong command");
+
+            }
+        }
+    }
+
+    static void checkRW(String filename) {
+        Path path = Paths.get(filename);
+        if (Files.exists(path)) {
+            System.out.println("Readable : " + Files.isReadable(path));
+            System.out.println("Writable : " + Files.isWritable(path));
+        }
+    }
+    static void setrwxToFalse(String filename){
+        File file = new File(filename);
+        file.setReadable(false);
+        file.setWritable(false);
+        file.setExecutable(false);
+    }
+
+    static void byFileReaderandFileWriter(String filename) {
+        System.out.print("read or write : ");
+        String command = sc.nextLine();
+        int ch;
+        if (command.equals("read")) {
+            try (FileReader fr = new FileReader(filename)) {
+                System.out.println("--- Output ---");
+
+                while ((ch = fr.read()) != -1) {
+                    System.out.print((char) ch);
+                }
+                System.out.println("--------------");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try (FileWriter fw = new FileWriter(filename)) {
+                System.out.println("What text u want to type in : ");
+                String text = sc.nextLine();
+                fw.write(text);
+                fw.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    static void readByBtye(String filename) {
+
+        Path path = Paths.get(filename);
+        System.out.print("read or write : ");
+        String command = sc.nextLine();
+        if (command.equals("read")) {
+            try {
+                System.out.println("--- Output ---");
+
+                byte[] fileArray = Files.readAllBytes(path);
+                for (byte b : fileArray) {
+                    System.out.print((char) b);
+                }
+                System.out.println("--------------");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                byte[] text = sc.nextLine().getBytes();
+                Files.write(path, text);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    static void readByBufferReaderandBufferWriter(String filename) {
+        Path path = Paths.get(filename);
+        Charset charset = Charset.forName("US-ASCII");
+        System.out.print("read or write : ");
+        String command = sc.nextLine();
+        if (command.equals("read")) {
+            try (BufferedReader reader = Files.newBufferedReader(path, charset)) {
+                String line = null;
+                System.out.println("--- Output ---");
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
+                }
+                System.out.println("--------------");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try (BufferedWriter writer = Files.newBufferedWriter(path, charset)) {
+                String text = sc.nextLine();
+                writer.write(text.toCharArray(), 0, text.length());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+}
+  ```
+
+</details>
+<details>
+  <summary>C</summary>
+  
+  ```c
+   
+#include <stdio.h>
+
+int main()
+{
+    FILE *fptr;
+    char filename[100];
+    char text[100];
+    int command;
+
+    printf("Enter the file name to work with (.txt): ");
+    scanf("%s", filename);
+
+    fptr = fopen(filename, "r+");
+    if (fptr == NULL){
+        printf("File not found!\n");
+        return 1;
+    }
+
+    while (1){
+        printf("1.read\n2.write\n3.exit : ");
+        scanf("%d", &command);
+
+        if (command == 1){
+            char ch;
+            rewind(fptr);
+            while ((ch = fgetc(fptr)) != EOF)
+            {
+                putchar(ch);
+            }
+            printf("\n");
+        }
+        else if (command == 2){
+            printf("Enter text: ");
+            scanf(" %[^\n]", text);
+            fseek(fptr, 0, SEEK_END);
+            fputs(text, fptr);
+            fflush(fptr);
+        }
+        else if (command == 3){
+            break;
+        }
+        else{
+            printf("Invalid command!\n");
+        }
+    }
+
+    fclose(fptr);
+    return 0;
+}
+  ```
+
+</details>
+<details>
+  <summary>Python</summary>
+  
+  ```python
+filename = input("Enter the file name to work with (.txt): ")
+
+while True:
+    try:
+        with open(filename, "r+") as file:
+            command = input("read or write or exit : ")
+
+            if command == "read":
+                file.seek(0)
+                print(file.read())
+
+            elif command == "write":
+                text = input("What do u want write : ")
+                file.write(text)
+
+            elif command == "exit":
+                break
+
+    except FileNotFoundError:
+        print(f"Error: File '{filename}' was not found!")
+        break
+  ```
+
+</details>
+
+## ข้อมูลอ้างอืง
+
+### Ruby
+
+https://docs.ruby-lang.org/en/master/File.html
+
+https://www.techotopia.com/index.php/Working_with_Files_in_Ruby
+
+### Java
+
+https://www.geeksforgeeks.org/java/file-handling-java-using-filewriter-filereader/
+
+https://docs.oracle.com/javase/tutorial/essential/io/file.html
+
+### C
+
+https://www.programiz.com/c-programming/c-file-input-output
+
+https://en.cppreference.com/w/c/io/fgetc
+
+### Python
+
+https://docs.python.org/3/tutorial/inputoutput.html
+
+https://www.geeksforgeeks.org/python/read-a-file-line-by-line-in-python/
